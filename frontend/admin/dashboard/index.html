@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sunset">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+      defer
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../utils/utils.js" defer></script>
+  </head>
+  <body>
+    <nav
+      class="fixed top-0 left-0 h-[47px] w-full px-4 py-2 z-50 bg-base-300 flex border-b border-base-100"
+    >
+      <div class="flex w-full items-center justify-between">
+        <div class="flex items-center gap-4">
+          <img src="../../favicon.ico" class="w-6" />
+          <div class="w-[1px] h-4 bg-primary transform rotate-12"></div>
+          <span class="text-sm font-semibold text-foreground">
+            Student Management System
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="relative inline-block">
+            <div class="avatar cursor-pointer" id="avatar">
+              <div class="w-8 rounded-full">
+                <img
+                  alt="User Avatar"
+                  id="nav-avatar-image"
+                  class="avatar-img"
+                />
+              </div>
+            </div>
+
+            <ul
+              class="absolute mt-2 right-0 z-50 dropdown menu w-52 rounded bg-base-300 shadow-sm"
+              id="popover-1"
+              style="display: none"
+            >
+              <div class="p-2 cursor-default border-b border-base-100 mb-2">
+                <span class="text-sm cursor-default" id="nav-profile-name"
+                  >Admin</span
+                >
+              </div>
+              <li><a href="./profile">Profile</a></li>
+            </ul>
+          </div>
+
+          <label
+            for="sidebar-main"
+            class="btn btn-ghost btn-sm drawer-button lg:hidden"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </label>
+        </div>
+      </div>
+    </nav>
+
+    <div class="drawer lg:drawer-open">
+      <input id="sidebar-main" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content px-4">
+        <main class="mt-[47px]">
+          <div class="py-2 flex justify-between gap-4 items-center">
+            <span class="text-lg text-primary font-semibold">Dashboard</span>
+
+            <span
+              id="digitalClock"
+              class="text-sm font-normal p-2 bg-base-200 rounded"
+              >5/19/2025 8:24 PM</span
+            >
+          </div>
+
+          <div class="py-2">
+            <section class="flex gap-4 justify-between flex-wrap">
+              <div
+                class="card min-w-[100px] flex-1 bg-primary card-xs rounded-md shadow-sm text-base-200"
+              >
+                <div class="card-body">
+                  <div class="flex justify-between">
+                    <span class="card-title">Total Users</span>
+
+                    <span class="card-title">
+                      <i class="fa-solid fa-users"></i>
+                    </span>
+                  </div>
+                  <span class="text-2xl font-bold" id="total-user"> 0 </span>
+                </div>
+              </div>
+
+              <div
+                class="card min-w-[100px] flex-1 bg-secondary card-xs rounded-md shadow-sm text-base-200"
+              >
+                <div class="card-body">
+                  <div class="flex justify-between">
+                    <span class="card-title">Total Verified Student</span>
+
+                    <span class="card-title">
+                      <i class="fa-solid fa-users"></i>
+                    </span>
+                  </div>
+                  <span class="text-2xl font-bold" id="total-verified">
+                    0
+                  </span>
+                </div>
+              </div>
+
+              <div
+                class="card min-w-[100px] flex-1 bg-accent card-xs rounded-md shadow-sm text-base-200"
+              >
+                <div class="card-body">
+                  <div class="flex justify-between">
+                    <span class="card-title">Active Session</span>
+
+                    <span class="card-title">
+                      <i class="fa-solid fa-users"></i>
+                    </span>
+                  </div>
+                  <span class="text-2xl font-bold" id="count-session"> 0 </span>
+                </div>
+              </div>
+
+              <div
+                class="card min-w-[100px] flex-1 bg-info card-xs rounded-md shadow-sm text-base-200"
+              >
+                <div class="card-body">
+                  <div class="flex justify-between">
+                    <span class="card-title">System Health</span>
+
+                    <span class="card-title">
+                      <i class="fa-solid fa-users"></i>
+                    </span>
+                  </div>
+                  <span class="text-2xl font-bold" id="system-health">
+                    Normal
+                  </span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+      <div class="drawer-side">
+        <label
+          for="sidebar-main"
+          aria-label="close sidebar"
+          class="drawer-overlay"
+        ></label>
+        <ul
+          class="menu bg-base-300 border-r border-base-100 text-base-content min-h-full w-54 px-4 pt-18 pb-4"
+        >
+          <li>
+            <a href=""><i class="fa-solid fa-boxes-stacked"></i> Task</a>
+          </li>
+          <li>
+            <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>
+          </li>
+          <li class="mt-auto">
+            <button class="btn-ghost" id="logoutBtn">
+              <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

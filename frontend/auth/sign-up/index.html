@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+    <title>Sign up</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+      defer
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
+      integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../utils/utils.js" defer></script>
+    <script src="../../services/singupService.js" defer></script>
+  </head>
+  <body>
+    <div id="toastContainer" class="toast toast-center hidden z-50">
+      <div class="alert alert-info flex items-center gap-2">
+        <span class="loading loading-spinner loading-sm"></span>
+        <span id="toastMessage">Submitting...</span>
+      </div>
+    </div>
+
+    <main class="grid place-content-center p-8 min-h-screen">
+      <dialog id="verifyModal" class="modal">
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Verify Account</h3>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Enter Verification Coode</legend>
+            <input type="text" class="input w-full" id="verificationInput" />
+          </fieldset>
+          <div class="modal-action">
+            <button id="verifyBtn" class="btn">Verify</button>
+          </div>
+        </div>
+      </dialog>
+
+      <span class="text-center mb-8 font-semibold text-lg text-primary"
+        >Create Account</span
+      >
+      <div class="card shadow-md bg-base-200 p-4">
+        <form id="signupForm">
+          <div class="flex gap-2 flex-wrap">
+            <div class="flex-1 min-w-[200px]">
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">First name</legend>
+                <input type="text" class="input" name="first_name" required />
+              </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Last name</legend>
+                <input type="text" class="input" name="last_name" required />
+              </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Email</legend>
+                <input type="email" class="input" name="email" required />
+              </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Password</legend>
+                <input
+                  type="password"
+                  class="input"
+                  name="password"
+                  id="passwordField"
+                  required
+                />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Password</legend>
+                <input type="tel" class="input" name="phone_number" required />
+              </fieldset>
+            </div>
+
+            <div class="flex-1 min-w-[200px]">
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Gender</legend>
+                <select class="select" name="gender" required>
+                  <option disabled selected>Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Course</legend>
+                <input type="text" class="input" name="course" required />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Address</legend>
+                <input type="text" class="input" name="address" required />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Birthdate</legend>
+                <input type="date" class="input" name="birth_date" required />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend">Profile</legend>
+                <input
+                  type="file"
+                  class="input"
+                  name="profile_url"
+                  accept="image/*"
+                />
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 mt-4">
+            <a href="../sign-in/" class="link text-xs"
+              >Already have an account?</a
+            >
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

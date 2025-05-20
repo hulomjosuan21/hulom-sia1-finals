@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+    <title>Sign in</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+      defer
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
+      integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../utils/utils.js" defer></script>
+    <script src="../../services/signinService.js" defer></script>
+  </head>
+  <body>
+    <div id="toastContainer" class="toast toast-center hidden z-50">
+      <div class="alert alert-info flex items-center gap-2">
+        <span class="loading loading-spinner loading-sm"></span>
+        <span id="toastMessage">Logging in...</span>
+      </div>
+    </div>
+
+    <main class="grid place-content-center p-8 min-h-screen">
+      <span class="text-center mb-8 font-semibold text-lg text-primary"
+        >Sign In</span
+      >
+      <div class="card shadow-md bg-base-200 p-4">
+        <form id="signinForm">
+          <div class="flex gap-2 flex-wrap flex-col">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Email</legend>
+              <input type="email" class="input" name="email" required />
+            </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Password</legend>
+              <input type="password" class="input" name="password" required />
+            </fieldset>
+
+            <div class="flex items-center justify-between gap-8 mt-4">
+              <a href="../sign-up/" class="link text-xs"
+                >Don't have an account?</a
+              >
+              <button type="submit" class="btn btn-primary w-34">
+                Sign in
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
