@@ -1,35 +1,3 @@
-function getCookie(name) {
-  const cookieArr = document.cookie.split("; ");
-  for (const cookie of cookieArr) {
-    const [key, val] = cookie.split("=");
-    if (key === name) return val;
-  }
-  return null;
-}
-
-function decodeJwtPayload(token) {
-  if (!token || typeof token !== "string") return null;
-
-  const parts = token.split(".");
-  if (parts.length !== 3) return null;
-
-  const payloadBase64Url = parts[1];
-  const base64 = payloadBase64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-  try {
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch (err) {
-    console.error("Failed to decode JWT payload:", err);
-    return null;
-  }
-}
-
 class SignUpService {
   constructor() {}
 
@@ -41,27 +9,36 @@ class SignUpService {
     try {
       const response = await api.post("/auth/sign-up", formData);
       console.log("Account id", response.data.payload.account_id);
-      this.account_id = response.data.payload.account_id;
-      return response.data;
+      this.access_token = response.data.payload.access_token;
+      this.account_id = parseJwt(response.data.payload.access_token).sub;
+      return response.data.message;
     } catch (error) {
       console.error("Sign up failed:", error.response?.data || error.message);
       throw error;
     }
   }
 
-  async handleVerify(formData) {
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
+  async handleVerify(verifyCode) {
+    try {
+      const response = await api.put("/auth/verify-account", {
+        account_id: this.account_id,
+        verification_token: verifyCode,
+      });
+      localStorage.setItem("access_token", response.data.payload.access_token);
+
+      return response.data.message;
+    } catch (error) {
+      console.error("Sign up failed:", error.response?.data || error.message);
+      throw error;
     }
   }
 
-  getDecodedAccessToken() {
-    const token = getCookie("access_token_cookie");
-    return decodeJwtPayload(token);
+  get geParseAccessToken() {
+    return parseJwt(this.access_token);
   }
 
-  get getAccountId() {
-    return this.account_id;
+  get isJwtNotExpired() {
+    return !isJwtExpired(this.access_token);
   }
 }
 
@@ -80,9 +57,10 @@ $(document).ready(function () {
       const data = await signUpService.handleSignUp(formData);
 
       console.log(data.message);
+      startTimer({ hours: 1 });
       $("#verifyModal")[0].showModal();
     } catch (e) {
-      console.log(e);
+      window.alert(e);
     } finally {
       toggleButtonLoading(submitBtn, false);
     }
@@ -90,12 +68,27 @@ $(document).ready(function () {
 
   $("#verifyBtn").click(async function () {
     const verificationCode = $("#verificationInput").val();
-    const token = signUpService.getDecodedAccessToken();
+    const $btn = $(this);
 
-    if (verificationCode) {
-      console.log("Token: ", token);
-    } else {
-      window.alert("Enter verification code!");
+    toggleButtonLoading($btn, true, "Verifying...");
+
+    try {
+      if (signUpService.isJwtNotExpired) {
+        const verifyCode = signUpService.geParseAccessToken.verification_token;
+        if (verificationCode === verifyCode) {
+          const message = await signUpService.handleVerify(verificationCode);
+
+          window.alert(message);
+        } else {
+          throw new Error("Error Code");
+        }
+      } else {
+        throw new Error("Token is expired!");
+      }
+    } catch (e) {
+      window.alert(e);
+    } finally {
+      toggleButtonLoading($btn, false);
     }
   });
 });

@@ -33,10 +33,25 @@
       crossorigin="anonymous"
       defer
     ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
+      integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
     <link rel="stylesheet" href="../../style.css" />
     <script src="../../utils/utils.js" defer></script>
+    <script src="../../services/authService.js" defer></script>
+    <script src="../../services/adminServise.js" defer></script>
   </head>
   <body>
+    <div
+      class="fixed grid place-content-center bg-base-200 min-h-screen z-80 w-screen"
+      id="loadingOverlay"
+    >
+      <span class="loading loading-infinity loading-xl"></span>
+    </div>
     <nav
       class="fixed top-0 left-0 h-[47px] w-full px-4 py-2 z-50 bg-base-300 flex border-b border-base-100"
     >
@@ -178,7 +193,14 @@
           class="menu bg-base-300 border-r border-base-100 text-base-content min-h-full w-54 px-4 pt-18 pb-4"
         >
           <li>
-            <a href=""><i class="fa-solid fa-boxes-stacked"></i> Task</a>
+            <a href="../dashboard/"
+              ><i class="fa-solid fa-boxes-stacked"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="../assignments/"
+              ><i class="fa-solid fa-list-check"></i> Assignments</a
+            >
           </li>
           <li>
             <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>

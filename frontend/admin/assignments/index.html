@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="sunset">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
 
-    <title>Student Dashboard</title>
+    <title>Admin Assignments</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -40,10 +40,10 @@
       referrerpolicy="no-referrer"
       defer
     ></script>
-    <link rel="stylesheet" href="style.css" />
-    <script src="./utils/utils.js" defer></script>
-    <script src="./services/authService.js" defer></script>
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../utils/utils.js" defer></script>
+    <script src="../../services/authService.js" defer></script>
+    <script src="../../services/adminServise.js" defer></script>
   </head>
   <body>
     <div
@@ -57,7 +57,7 @@
     >
       <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-4">
-          <img src="./favicon.ico" class="w-6" />
+          <img src="../../favicon.ico" class="w-6" />
           <div class="w-[1px] h-4 bg-primary transform rotate-12"></div>
           <span class="text-sm font-semibold text-foreground">
             Student Management System
@@ -83,7 +83,7 @@
             >
               <div class="p-2 cursor-default border-b border-base-100 mb-2">
                 <span class="text-sm cursor-default" id="nav-profile-name"
-                  >User</span
+                  >Admin</span
                 >
               </div>
               <li><a href="./profile">Profile</a></li>
@@ -115,7 +115,14 @@
           class="menu bg-base-300 border-r border-base-100 text-base-content min-h-full w-54 px-4 pt-18 pb-4"
         >
           <li>
-            <a href=""><i class="fa-solid fa-boxes-stacked"></i> Task</a>
+            <a href="../dashboard/"
+              ><i class="fa-solid fa-boxes-stacked"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="../assignments/"
+              ><i class="fa-solid fa-list-check"></i> Assignments</a
+            >
           </li>
           <li>
             <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>

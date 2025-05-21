@@ -22,33 +22,79 @@ function toggleButtonLoading($button, isLoading, loadingText = "Loading") {
   });
 }
 
-function getCookie(name) {
-  const cookieArr = document.cookie.split("; ");
-  for (const cookie of cookieArr) {
-    const [key, val] = cookie.split("=");
-    if (key === name) return val;
-  }
-  return null;
-}
-
-function decodeJwtPayload(token) {
-  if (!token) return null;
-  const payloadBase64Url = token.split(".")[1];
-  if (!payloadBase64Url) return null;
-
-  const base64 = payloadBase64Url.replace(/-/g, "+").replace(/_/g, "/");
-
+function parseJwt(token) {
   try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
         .join("")
     );
+
     return JSON.parse(jsonPayload);
-  } catch {
+  } catch (e) {
+    console.error("Invalid JWT", e);
     return null;
   }
+}
+
+function isJwtExpired(token) {
+  const decoded = parseJwt(token);
+  if (!decoded || !decoded.exp) return true;
+  const now = Math.floor(Date.now() / 1000);
+  return decoded.exp < now;
+}
+
+let countdownInterval;
+
+function startTimer({ seconds, hours }) {
+  clearInterval(countdownInterval);
+
+  if (
+    (seconds != null && hours != null) ||
+    (seconds == null && hours == null)
+  ) {
+    console.error("❌ Please provide either 'seconds' or 'hours', not both.");
+    document.getElementById("timer").textContent = "Invalid input";
+    return;
+  }
+
+  let totalSeconds = seconds != null ? seconds : hours * 3600;
+
+  function updateDisplay() {
+    const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+    const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+      2,
+      "0"
+    );
+    const secs = String(totalSeconds % 60).padStart(2, "0");
+    document.getElementById("timer").textContent = `${hrs}:${mins}:${secs}`;
+  }
+
+  updateDisplay();
+
+  countdownInterval = setInterval(() => {
+    totalSeconds--;
+    updateDisplay();
+
+    if (totalSeconds <= 0) {
+      clearInterval(countdownInterval);
+    }
+  }, 1000);
+}
+
+function showLoading() {
+  const overlay = document.getElementById("loadingOverlay");
+  if (overlay) overlay.style.display = "grid";
+}
+
+function hideLoading() {
+  const overlay = document.getElementById("loadingOverlay");
+  if (overlay) overlay.style.display = "none";
 }
 
 const api = axios.create({

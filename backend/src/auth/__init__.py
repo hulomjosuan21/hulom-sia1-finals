@@ -57,36 +57,23 @@ def sign_up():
         db.session.flush()
         db.session.commit()
         
-        access_token = create_access_token(identity=str(new_user.account_id),additional_claims={
-            "verification_token": verification_token,
-            "email":email},expires_delta=timedelta(hours=1))
-            
-        response = make_response(jsonify({
-            "success": True,
-            "message": f"Hi there welcome {first_name}",
-            "payload": {
-                "account_id": str(new_user.account_id)
-            }
-        }))
-            
-        set_access_cookies(response, access_token)
+        if(send_secret_via_email(email,verification_token)):
 
-        return response
-    
-        # if(send_secret_via_email(email,verification_token)):
-
-        #     access_token = create_access_token(identity=str(new_user.account_id),additional_claims={"verification_token": verification_token},expires_delta=timedelta(seconds=20))
+            access_token = create_access_token(identity=str(new_user.account_id),additional_claims={
+                "verification_token": verification_token,
+                "email":email},expires_delta=timedelta(hours=1))
             
-        #     response = make_response(jsonify({
-        #         "success": True,
-        #         "message": f"Hi there welcome {first_name}"
-        #     }))
+            response = make_response(jsonify({
+                "success": True,
+                "message": f"Hi there welcome {first_name}",
+                "payload": {
+                    "access_token": access_token
+                }
+            }))
             
-        #     set_access_cookies(response, access_token)
-
-        #     return response
-        # else:
-        #    raise Exception("Failed to send verification email")
+            return response
+        else:
+           raise Exception("Failed to send verification email")
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"success": False, "error": str(e)}), 500
@@ -118,16 +105,42 @@ def verify_user():
         user.token_expiration = None
         db.session.commit()
 
-        access_token = create_access_token(identity=str(account_id), additional_claims=user.to_dict())
+        access_token = create_access_token(identity=str(account_id))
 
         response = make_response(jsonify({
             "success": True,
             "message": "Account verified successfully",
+            "payload": {
+                "access_token": access_token
+            }
         }), 200)
-
-        set_access_cookies(response, access_token)
 
         return response
     except Exception as e:
         print("ERROR:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+    
+@auth_bp.post('/sign-in')
+def login():
+    try:
+        email = request.form['email']
+        password_hash = request.form['password']
+
+        user = User.query.filter_by(email=email).first()
+        if not user.verify_password(str(password_hash)):
+            return jsonify({"success": False, "error": "Passwords do not match"}), 400
+        
+        access_token = create_access_token(identity=str(user.account_id),expires_delta=timedelta(seconds=20))
+        response = make_response(jsonify({
+                "success": True,
+                "payload": {
+                    "role": str(user.role.value),
+                     "access_token": access_token
+                },
+                "message": f"Hi there welcome {user.first_name}"
+        }))
+
+        return response
+    except Exception as e:
+        print("ERROR:", e)
         return jsonify({"success": False, "error": str(e)}), 500
