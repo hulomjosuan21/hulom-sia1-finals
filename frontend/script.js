@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  checkConnection();
   const authUserClass = new AuthUser();
 
   try {

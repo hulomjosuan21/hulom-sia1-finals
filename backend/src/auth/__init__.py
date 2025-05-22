@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from src.email_send_code import send_secret_via_email
 from src.extensions import db
 from src.models.users import User, GenderEnum
-from src.utils import SaveFile
+from src.utils import upload_image_to_bucket
 from flask_jwt_extended import (
     create_access_token,
     set_access_cookies,
@@ -33,9 +33,7 @@ def sign_up():
         phone_number = request.form['phone_number']
         profile_file = request.files['profile_url']
             
-        filename = None
-        if profile_file:
-            filename = SaveFile(profile_file, subfolder="images")
+        image_url = upload_image_to_bucket(profile_file) if profile_file else None
 
         new_user = User(
             first_name=first_name,
@@ -49,9 +47,8 @@ def sign_up():
             token_expiration=token_expiration,
             phone_number=phone_number,
         )
-        if filename:
-            new_user.set_profile_url(filename.file_path)
-            filename.save()
+        if image_url:
+            new_user.set_profile_url(image_url)
         new_user.set_password(password_hash)
         db.session.add(new_user)
         db.session.flush()
@@ -130,7 +127,7 @@ def login():
         if not user.verify_password(str(password_hash)):
             return jsonify({"success": False, "error": "Passwords do not match"}), 400
         
-        access_token = create_access_token(identity=str(user.account_id),expires_delta=timedelta(seconds=20))
+        access_token = create_access_token(identity=str(user.account_id),expires_delta=timedelta(days=1))
         response = make_response(jsonify({
                 "success": True,
                 "payload": {

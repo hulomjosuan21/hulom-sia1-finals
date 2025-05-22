@@ -8,6 +8,7 @@ class AuthUser {
       const { data } = await api.get(
         `/user/get-single-obj?account_id=${this.account_id}`
       );
+      this.user_id = data.payload.user_id;
       this.authUser = data.payload;
       console.log(JSON.stringify(this.authUser, null, 2));
     } catch (error) {

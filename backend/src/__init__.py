@@ -21,6 +21,11 @@ def __initialize__() -> Flask:
     bcrypt.init_app(app)
     limiter.init_app(app)
     app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')
+    
+    @app.route("/api/ping")
+    def ping():
+        return {"message": "pong"}, 200
+
 
     with app.app_context():
         db.create_all()

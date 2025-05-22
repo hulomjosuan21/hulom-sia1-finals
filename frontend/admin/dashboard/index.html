@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="../../style.css" />
     <script src="../../utils/utils.js" defer></script>
     <script src="../../services/authService.js" defer></script>
-    <script src="../../services/adminServise.js" defer></script>
+    <script src="../../services/adminService.js" defer></script>
   </head>
   <body>
     <div
@@ -67,7 +67,7 @@
         <div class="flex items-center gap-2">
           <div class="relative inline-block">
             <div class="avatar cursor-pointer" id="avatar">
-              <div class="w-8 rounded-full">
+              <div class="w-8 rounded-full border border-primary border-3">
                 <img
                   alt="User Avatar"
                   id="nav-avatar-image"
@@ -99,6 +99,28 @@
         </div>
       </div>
     </nav>
+
+    <template id="row-template">
+      <tr class="hover:bg-base-200">
+        <td class="row-name flex items-center gap-2">
+          <div class="avatar cursor-pointer">
+            <div class="w-8 rounded-full overflow-hidden">
+              <img class="row-avatar" src="" alt="User Avatar" />
+            </div>
+          </div>
+          <span class="row-fullname"></span>
+        </td>
+        <td class="row-email"></td>
+        <td class="row-phone"></td>
+        <td class="row-gender"></td>
+        <td class="row-course"></td>
+        <td class="row-address"></td>
+        <td class="row-age"></td>
+        <td class="row-status">
+          <div class="badge text-xs rounded-full">Status</div>
+        </td>
+      </tr>
+    </template>
 
     <div class="drawer lg:drawer-open">
       <input id="sidebar-main" type="checkbox" class="drawer-toggle" />
@@ -181,6 +203,28 @@
               </div>
             </section>
           </div>
+
+          <div class="mt-4">
+            <div
+              class="overflow-x-auto rounded-md border border-base-300 bg-base-100"
+            >
+              <table class="table">
+                <thead>
+                  <tr class="bg-base-300">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone number</th>
+                    <th>Gender</th>
+                    <th>Course</th>
+                    <th>Address</th>
+                    <th>Age</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+              </table>
+            </div>
+          </div>
         </main>
       </div>
       <div class="drawer-side">
@@ -206,7 +250,7 @@
             <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>
           </li>
           <li class="mt-auto">
-            <button class="btn-ghost" id="logoutBtn">
+            <button class="btn-ghost" id="logoutBtn" onclick="handleLogout()">
               <i class="fa-solid fa-sign-out-alt"></i> Logout
             </button>
           </li>

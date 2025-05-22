@@ -22,6 +22,20 @@ function toggleButtonLoading($button, isLoading, loadingText = "Loading") {
   });
 }
 
+function calculateAge(birthdate) {
+  const birthDate = new Date(birthdate);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+}
+
 function parseJwt(token) {
   try {
     const base64Url = token.split(".")[1];
@@ -95,6 +109,23 @@ function showLoading() {
 function hideLoading() {
   const overlay = document.getElementById("loadingOverlay");
   if (overlay) overlay.style.display = "none";
+}
+
+function handleLogout() {
+  localStorage.removeItem("access_token");
+  window.location.href = "/auth/sign-in";
+}
+
+async function checkConnection() {
+  try {
+    showLoading();
+    const response = await api.get("/ping");
+    console.log("Connection OK:", response.status);
+  } catch (e) {
+    console.error("API connection failed:", e.message);
+  } finally {
+    hideLoading();
+  }
 }
 
 const api = axios.create({

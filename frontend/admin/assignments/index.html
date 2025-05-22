@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="../../style.css" />
     <script src="../../utils/utils.js" defer></script>
     <script src="../../services/authService.js" defer></script>
-    <script src="../../services/adminServise.js" defer></script>
+    <script src="../../services/assignmentService.js" defer></script>
   </head>
   <body>
     <div
@@ -67,7 +67,7 @@
         <div class="flex items-center gap-2">
           <div class="relative inline-block">
             <div class="avatar cursor-pointer" id="avatar">
-              <div class="w-8 rounded-full">
+              <div class="w-8 rounded-full border border-primary border-3">
                 <img
                   alt="User Avatar"
                   id="nav-avatar-image"
@@ -100,10 +100,173 @@
       </div>
     </nav>
 
+    <template id="student-option-template">
+      <option value=""></option>
+    </template>
+
     <div class="drawer lg:drawer-open">
       <input id="sidebar-main" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content px-4">
-        <main class="mt-[47px]"></main>
+        <main class="mt-[47px]">
+          <div class="flex items-center gap-8 max-w-4xl mx-auto p-6">
+            <section class="max-w-md flex flex-col gap-6 w-full">
+              <input
+                type="text"
+                placeholder="Type here"
+                class="input"
+                id="titleInput"
+              />
+
+              <textarea
+                placeholder="Description here"
+                rows="4"
+                class="textarea"
+                id="descriptionInput"
+              ></textarea>
+
+              <input
+                type="datetime-local"
+                placeholder="Type here"
+                class="input"
+                id="dueDateInput"
+              />
+
+              <div class="w-full">
+                <div
+                  id="selected-items"
+                  class="flex flex-wrap gap-2 mb-3"
+                ></div>
+
+                <select id="select-students" class="select">
+                  <option disabled>Select Students</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary w-fit" id="addManualAssignmentBtn">
+                Assign
+              </button>
+            </section>
+
+            <div class="relative flex items-center justify-center mx-8">
+              <div class="border-l border-base-800 h-40"></div>
+              <span class="absolute bg-white px-3 text-gray-500 font-semibold"
+                >OR</span
+              >
+            </div>
+
+            <section class="flex flex-col w-80 gap-6 items-end pl-24">
+              <input type="text" placeholder="Promp to AI" class="input" />
+              <button class="btn btn-primary w-fit">Proceed</button>
+            </section>
+          </div>
+
+          <template id="task-template">
+            <tr>
+              <th class="row-id"></th>
+              <td class="row-title"></td>
+              <td class="max-w-sm row-description"></td>
+              <td class="max-w-sm row-due_date"></td>
+              <td class="text-end">
+                <button class="btn btn-info btn-sm">
+                  <i class="fa-solid fa-file"></i>
+                </button>
+                <button class="btn btn-warning btn-sm">
+                  <i class="fa-solid fa-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-error">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </template>
+
+          <div class="">
+            <div
+              class="overflow-x-auto rounded-md border border-base-300 bg-base-100 mt-4"
+            >
+              <table class="table">
+                <thead>
+                  <tr class="bg-base-300">
+                    <th></th>
+                    <th>Title</th>
+                    <th class="max-w-sm">Description</th>
+                    <th>Due date</th>
+                    <th class="text-end"></th>
+                  </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <template id="task-template">
+            <tr>
+              <th class="row-id"></th>
+              <td class="row-title"></td>
+              <td class="max-w-sm row-description"></td>
+              <td class="max-w-sm row-due_date"></td>
+              <td class="text-end">
+                <button class="btn btn-info btn-sm">
+                  <i class="fa-solid fa-file"></i>
+                </button>
+                <button class="btn btn-sm btn-error">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </template>
+
+          <dialog id="showSubmit" class="modal">
+            <div class="modal-box w-full max-w-2xl">
+              <h3 class="text-sm font-semibold text-center">
+                Assigned Students & Assignment Status
+              </h3>
+
+              <template id="assigned-student-template">
+                <tr>
+                  <td class="row-id"></td>
+                  <td class="row-name"></td>
+                  <td class="row-url"></td>
+                  <td class="row-submitted_at"></td>
+                  <td class="row-status">
+                    <div class="badge text-xs rounded-full"></div>
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-success">
+                      <i class="fa-solid fa-check"></i>
+                    </button>
+                  </td>
+                </tr>
+              </template>
+
+              <div class="mt-2">
+                <div
+                  class="overflow-y-auto max-h-[300px] rounded-md border border-base-300 bg-base-100 mt-4"
+                >
+                  <table class="table w-full">
+                    <thead class="sticky top-0 bg-base-300 z-10">
+                      <tr>
+                        <th></th>
+                        <th>Student</th>
+                        <th>URL</th>
+                        <th>Submitted At</th>
+                        <th>Status</th>
+                        <th class="text-end"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="assigned-student-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="modal-action">
+                <form method="dialog">
+                  <button class="btn btn-ghost">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+        </main>
       </div>
       <div class="drawer-side">
         <label
@@ -128,7 +291,7 @@
             <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>
           </li>
           <li class="mt-auto">
-            <button class="btn-ghost" id="logoutBtn">
+            <button class="btn-ghost" id="logoutBtn" onclick="handleLogout()">
               <i class="fa-solid fa-sign-out-alt"></i> Logout
             </button>
           </li>
