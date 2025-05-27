@@ -4,6 +4,8 @@ from flask_cors import CORS
 from src.config import Config
 from src.register_routes import register_routes
 from src.extensions import db, migrate, jwt, bcrypt, limiter
+from src.models.users import *
+from src.models.assignment import *
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 def __initialize__() -> Flask:

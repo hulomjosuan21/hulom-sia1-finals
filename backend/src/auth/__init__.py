@@ -1,17 +1,17 @@
-from flask import request, jsonify, make_response, Blueprint
+from flask import json, request, jsonify, make_response, Blueprint
 import secrets
 from datetime import datetime, timedelta, timezone
 from src.email_send_code import send_secret_via_email
 from src.extensions import db
 from src.models.users import User, GenderEnum
-from src.utils import upload_image_to_bucket
+from src.utils import cryptojs_aes_decrypt, upload_image_to_bucket
 from flask_jwt_extended import (
     create_access_token,
     set_access_cookies,
 )
 
 auth_bp = Blueprint('auth_bp', __name__)
-
+secret_key = "JOSUAN"
 @auth_bp.post('/sign-up')
 def sign_up():
     try:
@@ -141,3 +141,43 @@ def login():
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"success": False, "error": str(e)}), 500
+    
+# @auth_bp.post('/sign-in')
+# def login():
+#     try:
+#         encrypted_data = request.json.get('encrypted')
+#         if not encrypted_data:
+#             return jsonify({"success": False, "error": "No encrypted data provided"}), 400
+
+#         decrypted_json = cryptojs_aes_decrypt(secret_key, encrypted_data)
+#         decrypted_obj = json.loads(decrypted_json)
+
+#         email = decrypted_obj.get('email')
+#         password = decrypted_obj.get('password')
+
+#         if not email or not password:
+#             return jsonify({"success": False, "error": "Email or password missing"}), 400
+
+#         user = User.query.filter_by(email=email).first()
+#         if not user:
+#             return jsonify({"success": False, "error": "User not found"}), 404
+
+#         if not user.verify_password(password):
+#             return jsonify({"success": False, "error": "Passwords do not match"}), 400
+
+#         access_token = create_access_token(identity=str(user.account_id), expires_delta=timedelta(days=1))
+
+#         response = make_response(jsonify({
+#             "success": True,
+#             "payload": {
+#                 "role": str(user.role.value),
+#                 "access_token": access_token
+#             },
+#             "message": f"Hi there, welcome {user.first_name}"
+#         }))
+
+#         return response
+
+#     except Exception as e:
+#         print("ERROR:", e)
+#         return jsonify({"success": False, "error": str(e)}), 500

@@ -8,7 +8,13 @@ import os
 import secrets
 import string
 from io import BytesIO
+import base64
 import tempfile
+from flask import request, jsonify, make_response
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+import hashlib
+
 def CreatedAt():
     return db.Column(
         db.DateTime(timezone=True),
@@ -86,3 +92,29 @@ def upload_image_to_bucket(file, bucket_name=BUCKET_NAME, folder="uploads") -> s
     except Exception as e:
         print(f"[EXCEPTION] Exception during upload: {e}")
         return None
+    
+def cryptojs_aes_decrypt(passphrase, enc_b64):
+    # Decode base64
+    encrypted = base64.b64decode(enc_b64)
+
+    # Check for "Salted__" prefix and extract salt
+    if encrypted[:8] != b"Salted__":
+        raise ValueError("Invalid encrypted data")
+
+    salt = encrypted[8:16]
+    ciphertext = encrypted[16:]
+
+    # Derive key and iv from passphrase and salt (OpenSSL EVP_BytesToKey)
+    def evp_bytes_to_key(password, salt, key_len=32, iv_len=16):
+        dtot = b""
+        d = b""
+        while len(dtot) < key_len + iv_len:
+            d = hashlib.md5(d + password + salt).digest()
+            dtot += d
+        return dtot[:key_len], dtot[key_len:key_len + iv_len]
+
+    key, iv = evp_bytes_to_key(passphrase.encode(), salt)
+
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    decrypted = unpad(cipher.decrypt(ciphertext), AES.block_size)
+    return decrypted.decode("utf-8")

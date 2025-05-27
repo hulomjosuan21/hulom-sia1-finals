@@ -130,7 +130,6 @@ async function checkConnection() {
 
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
-  timeout: 10000,
   withCredentials: true,
 });
 
@@ -149,3 +148,4 @@ $(document).ready(function () {
     $("#popover-1").toggle();
   });
 });
+

@@ -43,6 +43,21 @@ class AssignmentService {
       throw error;
     }
   }
+
+  async textAgent(query, created_by, callBack) {
+    const { data } = await api.post(
+      `/agent/text`,
+      {
+        created_by,
+        query
+      }
+    );
+    callBack()
+    return data.message;
+  } catch(error) {
+    console.error("Error:", error.response?.data || error.message);
+    throw error;
+  }
 }
 
 $(document).ready(async function () {
@@ -312,6 +327,28 @@ $(document).ready(async function () {
       console.log(error);
     }
   });
+
+  $("#aiForm").on('submit', async function (e) {
+    e.preventDefault()
+    const submitBtn = $(this).find('button[type="submit"]');
+
+    toggleButtonLoading(submitBtn, true, "Loading...");
+    const formData = new FormData(this)
+    query = formData.get('query')
+    created_by = authUserClass.user_id
+    if (!query || !created_by) {
+      return
+    }
+
+    try {
+      const message = await assignmentService.textAgent(query, created_by, setAssignments);
+      console.log(message)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      toggleButtonLoading(submitBtn, false);
+    }
+  })
 
   initialize();
 });

@@ -1,5 +1,7 @@
+const secretKey = "JOSUAN"
+
 class SignInService {
-  constructor() {}
+  constructor() { }
 
   async handleSignIn(formData) {
     try {
@@ -12,6 +14,30 @@ class SignInService {
       throw error;
     }
   }
+
+  // async handleSignIn(formData) {
+  //   try {
+  //     const obj = {};
+  //     formData.forEach((value, key) => {
+  //       obj[key] = value;
+  //     });
+
+  //     const jsonStr = JSON.stringify(obj);
+
+  //     const encrypted = CryptoJS.AES.encrypt(jsonStr, secretKey).toString();
+
+  //     const response = await api.post("/auth/sign-in", { encrypted });
+
+  //     if (response.data?.payload?.access_token) {
+  //       localStorage.setItem("access_token", response.data.payload.access_token);
+  //     }
+
+  //     return response.data.message;
+  //   } catch (error) {
+  //     console.error("Sign in failed:", error.response?.data || error.message);
+  //     throw error;
+  //   }
+  // }
 }
 
 $(document).ready(function () {

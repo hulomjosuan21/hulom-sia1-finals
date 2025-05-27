@@ -9,16 +9,25 @@ from datetime import datetime, date
 
 ph = PasswordHasher()
 
+class GenderEnum(Enum):
+    MALE = "Male"
+    FEMALE = "Female"
+    
 class RoleEnum(Enum):
     ADMIN = "Admin"
     STUDENT = "Student"
 
-class GenderEnum(Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-
 class User(db.Model):
     __tablename__ = 'users'
+
+    role = db.Column(
+        SqlEnum(
+            RoleEnum,
+            values_callable=lambda x: [e.value for e in x],
+            name="roleenum"
+        ),
+        default=RoleEnum.STUDENT.value
+    )
 
     user_id = db.Column(
         UUID(as_uuid=True),
@@ -52,14 +61,6 @@ class User(db.Model):
     phone_number = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)
-    role = db.Column(
-        SqlEnum(
-            RoleEnum,
-            values_callable=lambda x: [e.value for e in x],
-            name="roleenum"
-        ),
-        default=RoleEnum.STUDENT.value
-    )
     profile_url = db.Column(db.String)
 
     is_active = db.Column(db.Boolean, default=False)
@@ -77,6 +78,7 @@ class User(db.Model):
             return ph.verify(self.password_hash, password)
         except Exception:
             return False
+        
     def to_dict(self):
         return {
             "user_id": str(self.user_id),
