@@ -17,4 +17,4 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_EXPIRATION_SECONDS = 3600
     CORS_SUPPORT_CREDENTIALS = True
-    CORS_ORIGINS = ['http://localhost:5500', 'http://127.0.0.1:5500','https://hulom-sia1-finals.vercel.app/']
+    CORS_ORIGINS = ['https://hulom-sia1-finals.vercel.app']
