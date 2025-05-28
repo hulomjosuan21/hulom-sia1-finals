@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000/api";
+const BACKEND_URL = "https://hulom-sia1-finals.onrender.com/api";
 
 const DEFAULT_PROFILE_IMAGE = "/assets/default-profile-image.png";
 
@@ -148,4 +148,3 @@ $(document).ready(function () {
     $("#popover-1").toggle();
   });
 });
-
