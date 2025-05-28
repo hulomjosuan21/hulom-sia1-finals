@@ -1,233 +1,333 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="sunset">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="../../favicon.ico" />
+    <title>Admin Assignments</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+      defer
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
+      integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../utils/utils.js" defer></script>
+    <script src="../../services/authService.js" defer></script>
+    <script src="../../services/assignmentService.js" defer></script>
+  </head>
 
-  <title>Admin Assignments</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-    crossorigin="anonymous" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.9.0/axios.min.js"
-    integrity="sha512-FPlUpimug7gt7Hn7swE8N2pHw/+oQMq/+R/hH/2hZ43VOQ+Kjh25rQzuLyPz7aUWKlRpI7wXbY6+U3oFPGjPOA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-  <link rel="stylesheet" href="../../style.css" />
-  <script src="../../utils/utils.js" defer></script>
-  <script src="../../services/authService.js" defer></script>
-  <script src="../../services/assignmentService.js" defer></script>
-</head>
-
-<body>
-  <div class="fixed grid place-content-center bg-base-200 min-h-screen z-80 w-screen" id="loadingOverlay">
-    <span class="loading loading-infinity loading-xl"></span>
-  </div>
-  <nav class="fixed top-0 left-0 h-[47px] w-full px-4 py-2 z-50 bg-base-300 flex border-b border-base-100">
-    <div class="flex w-full items-center justify-between">
-      <div class="flex items-center gap-4">
-        <img src="../../favicon.ico" class="w-6" />
-        <div class="w-[1px] h-4 bg-primary transform rotate-12"></div>
-        <span class="text-sm font-semibold text-foreground">
-          Student Management System
-        </span>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <div class="relative inline-block">
-          <div class="avatar cursor-pointer" id="avatar">
-            <div class="w-8 rounded-full border border-primary border-3">
-              <img alt="User Avatar" id="nav-avatar-image" class="avatar-img" />
-            </div>
-          </div>
-
-          <ul class="absolute mt-2 right-0 z-50 dropdown menu w-52 rounded bg-base-300 shadow-sm" id="popover-1"
-            style="display: none">
-            <div class="p-2 cursor-default border-b border-base-100 mb-2">
-              <span class="text-sm cursor-default" id="nav-profile-name">Admin</span>
-            </div>
-            <li><a href="./profile">Profile</a></li>
-          </ul>
-        </div>
-
-        <label for="sidebar-main" class="btn btn-ghost btn-sm drawer-button lg:hidden">
-          <i class="fa-solid fa-bars"></i>
-        </label>
-      </div>
+  <body>
+    <div
+      class="fixed grid place-content-center bg-base-200 min-h-screen z-80 w-screen"
+      id="loadingOverlay"
+    >
+      <span class="loading loading-infinity loading-xl"></span>
     </div>
-  </nav>
-
-  <template id="student-option-template">
-    <option value=""></option>
-  </template>
-
-  <div class="drawer lg:drawer-open">
-    <input id="sidebar-main" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content px-4">
-      <main class="mt-[47px]">
-        <div class="flex items-center gap-8 max-w-4xl mx-auto p-6">
-          <section class="max-w-md flex flex-col gap-6 w-full">
-            <input type="text" placeholder="Type here" class="input" id="titleInput" />
-
-            <textarea placeholder="Description here" rows="4" class="textarea" id="descriptionInput"></textarea>
-
-            <input type="datetime-local" placeholder="Type here" class="input" id="dueDateInput" />
-
-            <div class="w-full">
-              <div id="selected-items" class="flex flex-wrap gap-2 mb-3"></div>
-
-              <select id="select-students" class="select">
-                <option disabled>Select Students</option>
-              </select>
-            </div>
-
-            <button class="btn btn-primary w-fit" id="addManualAssignmentBtn">
-              Assign
-            </button>
-          </section>
-
-          <div class="relative flex items-center justify-center mx-8">
-            <div class="border-l border-base-800 h-40"></div>
-            <span class="absolute bg-white px-3 text-gray-500 font-semibold">OR</span>
-          </div>
-
-          <form id="aiForm">
-            <section class="flex flex-col w-80 gap-6 items-end pl-24">
-              <input type="text" placeholder="Promp to AI" class="input" name="query" />
-              <button type="submit" class="btn btn-primary w-fit">Proceed</button>
-            </section>
-          </form>
+    <nav
+      class="fixed top-0 left-0 h-[47px] w-full px-4 py-2 z-50 bg-base-300 flex border-b border-base-100"
+    >
+      <div class="flex w-full items-center justify-between">
+        <div class="flex items-center gap-4">
+          <img src="../../favicon.ico" class="w-6" />
+          <div class="w-[1px] h-4 bg-primary transform rotate-12"></div>
+          <span class="text-sm font-semibold text-foreground">
+            Student Management System
+          </span>
         </div>
 
-        <template id="task-template">
-          <tr>
-            <th class="row-id"></th>
-            <td class="row-title"></td>
-            <td class="max-w-sm row-description"></td>
-            <td class="max-w-sm row-due_date"></td>
-            <td class="text-end">
-              <button class="btn btn-info btn-sm">
-                <i class="fa-solid fa-file"></i>
-              </button>
-              <button class="btn btn-warning btn-sm">
-                <i class="fa-solid fa-pencil"></i>
-              </button>
-              <button class="btn btn-sm btn-error">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </template>
-
-        <div class="">
-          <div class="overflow-x-auto rounded-md border border-base-300 bg-base-100 mt-4">
-            <table class="table">
-              <thead>
-                <tr class="bg-base-300">
-                  <th></th>
-                  <th>Title</th>
-                  <th class="max-w-sm">Description</th>
-                  <th>Due date</th>
-                  <th class="text-end"></th>
-                </tr>
-              </thead>
-              <tbody id="table-body"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <template id="task-template">
-          <tr>
-            <th class="row-id"></th>
-            <td class="row-title"></td>
-            <td class="max-w-sm row-description"></td>
-            <td class="max-w-sm row-due_date"></td>
-            <td class="text-end">
-              <button class="btn btn-info btn-sm">
-                <i class="fa-solid fa-file"></i>
-              </button>
-              <button class="btn btn-sm btn-error">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </template>
-
-        <dialog id="showSubmit" class="modal">
-          <div class="modal-box w-full max-w-2xl">
-            <h3 class="text-sm font-semibold text-center">
-              Assigned Students & Assignment Status
-            </h3>
-
-            <template id="assigned-student-template">
-              <tr>
-                <td class="row-id"></td>
-                <td class="row-name"></td>
-                <td class="row-url"></td>
-                <td class="row-submitted_at"></td>
-                <td class="row-status">
-                  <div class="badge text-xs rounded-full"></div>
-                </td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-success">
-                    <i class="fa-solid fa-check"></i>
-                  </button>
-                </td>
-              </tr>
-            </template>
-
-            <div class="mt-2">
-              <div class="overflow-y-auto max-h-[300px] rounded-md border border-base-300 bg-base-100 mt-4">
-                <table class="table w-full">
-                  <thead class="sticky top-0 bg-base-300 z-10">
-                    <tr>
-                      <th></th>
-                      <th>Student</th>
-                      <th>URL</th>
-                      <th>Submitted At</th>
-                      <th>Status</th>
-                      <th class="text-end"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="assigned-student-tbody"></tbody>
-                </table>
+        <div class="flex items-center gap-2">
+          <div class="relative inline-block">
+            <div class="avatar cursor-pointer" id="avatar">
+              <div class="w-8 rounded-full border border-primary border-3">
+                <img
+                  alt="User Avatar"
+                  id="nav-avatar-image"
+                  class="avatar-img"
+                />
               </div>
             </div>
 
-            <div class="modal-action">
+            <ul
+              class="absolute mt-2 right-0 z-50 dropdown menu w-52 rounded bg-base-300 shadow-sm"
+              id="popover-1"
+              style="display: none"
+            >
+              <div class="p-2 cursor-default border-b border-base-100 mb-2">
+                <span class="text-sm cursor-default" id="nav-profile-name"
+                  >Admin</span
+                >
+              </div>
+              <li><span onclick="my_modal_3.showModal()">Profile</span></li>
+            </ul>
+          </div>
+
+          <label
+            for="sidebar-main"
+            class="btn btn-ghost btn-sm drawer-button lg:hidden"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </label>
+        </div>
+      </div>
+    </nav>
+
+    <template id="student-option-template">
+      <option value=""></option>
+    </template>
+
+    <div class="drawer lg:drawer-open">
+      <input id="sidebar-main" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content px-4">
+        <main class="mt-[47px]">
+          <div class="flex items-center gap-8 max-w-4xl mx-auto p-6">
+            <section class="max-w-md flex flex-col gap-6 w-full">
+              <input
+                type="text"
+                placeholder="Type here"
+                class="input"
+                id="titleInput"
+              />
+
+              <textarea
+                placeholder="Description here"
+                rows="4"
+                class="textarea"
+                id="descriptionInput"
+              ></textarea>
+
+              <input
+                type="datetime-local"
+                placeholder="Type here"
+                class="input"
+                id="dueDateInput"
+              />
+
+              <div class="w-full">
+                <div
+                  id="selected-items"
+                  class="flex flex-wrap gap-2 mb-3"
+                ></div>
+
+                <select id="select-students" class="select">
+                  <option disabled>Select Students</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary w-fit" id="addManualAssignmentBtn">
+                Assign
+              </button>
+            </section>
+
+            <div class="relative flex items-center justify-center mx-8">
+              <div class="border-l border-base-800 h-40"></div>
+              <span class="absolute bg-white px-3 text-gray-500 font-semibold"
+                >OR</span
+              >
+            </div>
+
+            <form id="aiForm">
+              <section class="flex flex-col w-80 gap-6 items-end pl-24">
+                <input
+                  type="text"
+                  placeholder="Mo gana na ang all haha!"
+                  class="input"
+                  name="query"
+                />
+                <button type="submit" class="btn btn-primary w-fit">
+                  Proceed
+                </button>
+              </section>
+            </form>
+          </div>
+          <dialog id="my_modal_3" class="modal">
+            <div class="modal-box">
               <form method="dialog">
-                <button class="btn btn-ghost">Close</button>
+                <button
+                  class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >
+                  ✕
+                </button>
               </form>
+              <h3 class="text-lg font-bold">Title here</h3>
+              <p class="py-4">
+                Sir kato nalay checki ako AI Sir😭 kay ge kapoy nko sig code mag
+                tuon pkog Flutter mo gana na btw to ako kato pag semi to mo
+                late2x gani to tong submission gae ko grado kanang malipay akong
+                AMO sa trabaho eg puhon😃
+              </p>
+            </div>
+          </dialog>
+
+          <template id="task-template">
+            <tr>
+              <th class="row-id"></th>
+              <td class="row-title"></td>
+              <td class="max-w-sm row-description"></td>
+              <td class="max-w-sm row-due_date"></td>
+              <td class="text-end">
+                <button class="btn btn-info btn-sm">
+                  <i class="fa-solid fa-file"></i>
+                </button>
+                <button
+                  class="btn btn-warning btn-sm"
+                  onclick="my_modal_3.showModal()"
+                >
+                  <i class="fa-solid fa-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-error">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </template>
+
+          <div class="">
+            <div
+              class="overflow-x-auto rounded-md border border-base-300 bg-base-100 mt-4"
+            >
+              <table class="table">
+                <thead>
+                  <tr class="bg-base-300">
+                    <th></th>
+                    <th>Title</th>
+                    <th class="max-w-sm">Description</th>
+                    <th>Due date</th>
+                    <th class="text-end"></th>
+                  </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+              </table>
             </div>
           </div>
-        </dialog>
-      </main>
-    </div>
-    <div class="drawer-side">
-      <label for="sidebar-main" aria-label="close sidebar" class="drawer-overlay"></label>
-      <ul class="menu bg-base-300 border-r border-base-100 text-base-content min-h-full w-54 px-4 pt-18 pb-4">
-        <li>
-          <a href="../dashboard/"><i class="fa-solid fa-boxes-stacked"></i> Dashboard</a>
-        </li>
-        <li>
-          <a href="../assignments/"><i class="fa-solid fa-list-check"></i> Assignments</a>
-        </li>
-        <li>
-          <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>
-        </li>
-        <li class="mt-auto">
-          <button class="btn-ghost" id="logoutBtn" onclick="handleLogout()">
-            <i class="fa-solid fa-sign-out-alt"></i> Logout
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-</body>
 
+          <template id="task-template">
+            <tr>
+              <th class="row-id"></th>
+              <td class="row-title"></td>
+              <td class="max-w-sm row-description"></td>
+              <td class="max-w-sm row-due_date"></td>
+              <td class="text-end">
+                <button class="btn btn-info btn-sm">
+                  <i class="fa-solid fa-file"></i>
+                </button>
+                <button class="btn btn-sm btn-error">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </template>
+
+          <dialog id="showSubmit" class="modal">
+            <div class="modal-box w-full max-w-2xl">
+              <h3 class="text-sm font-semibold text-center">
+                Assigned Students & Assignment Status
+              </h3>
+
+              <template id="assigned-student-template">
+                <tr>
+                  <td class="row-id"></td>
+                  <td class="row-name"></td>
+                  <td class="row-url"></td>
+                  <td class="row-submitted_at"></td>
+                  <td class="row-status">
+                    <div class="badge text-xs rounded-full"></div>
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-success">
+                      <i class="fa-solid fa-check"></i>
+                    </button>
+                  </td>
+                </tr>
+              </template>
+
+              <div class="mt-2">
+                <div
+                  class="overflow-y-auto max-h-[300px] rounded-md border border-base-300 bg-base-100 mt-4"
+                >
+                  <table class="table w-full">
+                    <thead class="sticky top-0 bg-base-300 z-10">
+                      <tr>
+                        <th></th>
+                        <th>Student</th>
+                        <th>URL</th>
+                        <th>Submitted At</th>
+                        <th>Status</th>
+                        <th class="text-end"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="assigned-student-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="modal-action">
+                <form method="dialog">
+                  <button class="btn btn-ghost">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+        </main>
+      </div>
+      <div class="drawer-side">
+        <label
+          for="sidebar-main"
+          aria-label="close sidebar"
+          class="drawer-overlay"
+        ></label>
+        <ul
+          class="menu bg-base-300 border-r border-base-100 text-base-content min-h-full w-54 px-4 pt-18 pb-4"
+        >
+          <li>
+            <a href="../dashboard/"
+              ><i class="fa-solid fa-boxes-stacked"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="../assignments/"
+              ><i class="fa-solid fa-list-check"></i> Assignments</a
+            >
+          </li>
+          <li>
+            <a><i class="fa-solid fa-chart-simple"></i> Analytics</a>
+          </li>
+          <li class="mt-auto">
+            <button class="btn-ghost" id="logoutBtn" onclick="handleLogout()">
+              <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>

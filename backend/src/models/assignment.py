@@ -59,7 +59,6 @@ class Assignment(db.Model):
             ]
         }
 
-
 class AssignmentAssigneeStatusEnum(Enum):
     COMPLETE = "Complete"
     PENDING = "Pending"

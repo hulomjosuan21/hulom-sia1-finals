@@ -114,3 +114,31 @@ async def update_assignee_assignment(assigned_to_id):
         print("ERROR:", e)
         return jsonify({"success": False, "error": str(e)}), 500
 
+@assignment_bp.get('/student-assignments/<string:user_id>')
+async def get_student_assignments(user_id):
+    try:
+        assignee_entries = AssignmentAssignee.query.filter_by(assigned_to_id=user_id).all()
+
+        if not assignee_entries:
+            return jsonify({"success": True, "message": "No assignments found", "payload": []}), 200
+
+        assignments_data = []
+        for assignee in assignee_entries:
+            assignment = assignee.assignment
+            assignment_dict = assignment.to_dict()
+            assignment_dict["assignee_status"] = {
+                "status": assignee.status.name,
+                "submitted_at": assignee.submitted_at.isoformat() if assignee.submitted_at else None,
+                "attachment_url": assignee.attachment_url
+            }
+            assignments_data.append(assignment_dict)
+
+        return jsonify({
+            "success": True,
+            "message": "Assignments retrieved successfully",
+            "payload": assignments_data
+        }), 200
+
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({"success": False, "error": str(e)}), 500

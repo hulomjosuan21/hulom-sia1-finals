@@ -1,6 +1,10 @@
 class AuthUser {
   constructor() {
-    this.getToken();
+    this.authUser = null;
+    this.account_id = null;
+    this.user_id = null;
+
+    this.getToken(); // Make sure account_id is set here
   }
 
   async fetchUserObj() {
@@ -10,11 +14,18 @@ class AuthUser {
       );
       this.user_id = data.payload.user_id;
       this.authUser = data.payload;
-      console.log(JSON.stringify(this.authUser, null, 2));
     } catch (error) {
       console.error("Sign up failed:", error.response?.data || error.message);
       throw error;
     }
+  }
+
+  set setUserObj(user) {
+    this.authUser = user;
+  }
+
+  get getUserObj() {
+    return this.authUser;
   }
 
   async checkAuth() {
@@ -28,6 +39,7 @@ class AuthUser {
 
     await this.fetchUserObj();
     const authUser = this.authUser;
+    this.setUserObj = authUser;
     const currentPath = window.location.pathname;
 
     if (!authUser) {
@@ -76,6 +88,8 @@ class AuthUser {
         const obj = parseJwt(token);
         this.account_id = obj.sub;
       }
-    } catch {}
+    } catch (error) {
+      console.error("Token error:", error);
+    }
   }
 }
